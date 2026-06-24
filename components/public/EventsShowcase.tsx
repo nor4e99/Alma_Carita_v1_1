@@ -51,7 +51,16 @@ export function EventsShowcase({ events }: { events: EventItem[] }) {
               direction: i % 2 === 0 ? 'ltr' : 'rtl',
             }}
           >
-            <div className={ev.gallery[0] ?? 'g1'} style={{ minHeight: 240, height: '100%' }} />
+            <div
+              className={ev.gallery[0]?.startsWith('/') ? undefined : (ev.gallery[0] ?? 'g1')}
+              style={{
+                minHeight: 240,
+                height: '100%',
+                backgroundImage: ev.gallery[0]?.startsWith('/') ? `url(${ev.gallery[0]})` : undefined,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            />
             <div style={{ padding: 'clamp(24px, 4vw, 44px)', direction: 'ltr' }}>
               <div style={{ display: 'flex', gap: 14, alignItems: 'center', marginBottom: 14, flexWrap: 'wrap' }}>
                 <span style={{ fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent)' }}>

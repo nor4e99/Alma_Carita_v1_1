@@ -8,15 +8,19 @@ type Petal = {
   label: string;
   sub: string;
   color: string;
-  // позиция на етикета спрямо центъра
-  pos: 'top' | 'right' | 'bottom' | 'left';
+  rotate: number;
+  shape: 'teardrop' | 'almond';
+  labelPos: 'top' | 'right' | 'bottom' | 'left';
 };
 
+const TEARDROP = 'M100 100 C 80 70, 84 34, 100 18 C 116 34, 120 70, 100 100 Z';
+const ALMOND_UP = 'M100 100 C 86 70, 86 40, 100 22 C 114 40, 114 70, 100 100 Z';
+
 const PETALS: Petal[] = [
-  { href: '/imoti', label: 'Имоти', sub: 'Пространство за теб', color: 'var(--pillar-imoti)', pos: 'top' },
-  { href: '/obuchenia', label: 'Обучения', sub: 'Развитие и знание', color: 'var(--pillar-obuchenia)', pos: 'right' },
-  { href: '/detski-tsentar', label: 'Детски център', sub: 'Грижа и игра', color: 'var(--pillar-detsa)', pos: 'bottom' },
-  { href: '/sabitia', label: 'Събития', sub: 'Минали мигове', color: 'var(--pillar-sabitia)', pos: 'left' },
+  { href: '/imoti', label: 'Имоти', sub: 'Пространство за теб', color: '#4f9e4a', rotate: 0, shape: 'teardrop', labelPos: 'top' },
+  { href: '/obuchenia', label: 'Обучения', sub: 'Развитие и знание', color: '#3b56a6', rotate: 90, shape: 'almond', labelPos: 'right' },
+  { href: '/detski-tsentar', label: 'Детски център', sub: 'Грижа и игра', color: '#e8702a', rotate: 180, shape: 'teardrop', labelPos: 'bottom' },
+  { href: '/sabitia', label: 'Събития', sub: 'Минали мигове', color: '#f4c430', rotate: 270, shape: 'almond', labelPos: 'left' },
 ];
 
 export function FlowerNav() {
@@ -33,27 +37,19 @@ export function FlowerNav() {
     setTilt({ x: py * -10, y: px * 10 });
   }
 
-  // геометрия на венчелистчетата (ellipse) около център 110,110
-  const petalGeo: Record<Petal['pos'], { cx: number; cy: number; rx: number; ry: number }> = {
-    top: { cx: 110, cy: 64, rx: 30, ry: 48 },
-    right: { cx: 156, cy: 110, rx: 48, ry: 30 },
-    bottom: { cx: 110, cy: 156, rx: 30, ry: 48 },
-    left: { cx: 64, cy: 110, rx: 48, ry: 30 },
-  };
-
-  const labelPos: Record<Petal['pos'], React.CSSProperties> = {
-    top: { top: '-8%', left: '50%', transform: 'translate(-50%,-100%)' },
-    right: { top: '50%', right: '-4%', transform: 'translate(100%,-50%)' },
-    bottom: { bottom: '-8%', left: '50%', transform: 'translate(-50%,100%)' },
-    left: { top: '50%', left: '-4%', transform: 'translate(-100%,-50%)' },
+  const labelStyle: Record<Petal['labelPos'], React.CSSProperties> = {
+    top: { top: '2%', left: '50%', transform: 'translate(-50%,-100%)' },
+    right: { top: '50%', right: '0%', transform: 'translate(108%,-50%)' },
+    bottom: { bottom: '2%', left: '50%', transform: 'translate(-50%,100%)' },
+    left: { top: '50%', left: '0%', transform: 'translate(-108%,-50%)' },
   };
 
   return (
     <div
       ref={wrapRef}
       onMouseMove={onMove}
-      onMouseLeave={() => setTilt({ x: 0, y: 0 })}
-      style={{ position: 'relative', width: 'min(440px, 80vw)', aspectRatio: '1', margin: '0 auto' }}
+      onMouseLeave={() => { setTilt({ x: 0, y: 0 }); setHovered(null); }}
+      style={{ position: 'relative', width: 'min(460px, 82vw)', aspectRatio: '1', margin: '0 auto' }}
       className="scene"
     >
       <div
@@ -65,47 +61,44 @@ export function FlowerNav() {
           transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
         }}
       >
-        <svg viewBox="0 0 220 220" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
+        <svg viewBox="0 0 200 200" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
           <defs>
-            <radialGradient id="flowerGlow" cx="50%" cy="50%" r="55%">
-              <stop offset="0%" stopColor="#f0c070" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="#b090c8" stopOpacity="0.12" />
+            <radialGradient id="flowerNavAura" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#fbe3a8" stopOpacity="0.95" />
+              <stop offset="42%" stopColor="#f4a98a" stopOpacity="0.5" />
+              <stop offset="72%" stopColor="#c9a0d8" stopOpacity="0.38" />
+              <stop offset="100%" stopColor="#b9a3da" stopOpacity="0" />
             </radialGradient>
           </defs>
 
-          {/* мек ореол */}
-          <circle cx="110" cy="110" r="104" fill="url(#flowerGlow)" />
+          <circle cx="100" cy="100" r="98" fill="url(#flowerNavAura)" />
 
-          {/* венчелистчета = стълбове */}
           {PETALS.map((p, i) => {
-            const g = petalGeo[p.pos];
             const active = hovered === p.href;
+            const dimmed = hovered && !active;
             return (
               <Link key={p.href} href={p.href}>
-                <ellipse
+                <path
                   className="petal-nav-item"
-                  cx={g.cx}
-                  cy={g.cy}
-                  rx={g.rx}
-                  ry={g.ry}
+                  d={p.shape === 'teardrop' ? TEARDROP : ALMOND_UP}
+                  transform={`rotate(${p.rotate} 100 100)`}
                   fill={p.color}
-                  opacity={hovered && !active ? 0.45 : 0.92}
+                  opacity={dimmed ? 0.4 : 1}
                   onMouseEnter={() => setHovered(p.href)}
                   onMouseLeave={() => setHovered(null)}
-                  style={{ animation: `petal-open 0.9s ${0.2 + i * 0.12}s both` }}
+                  style={{ animation: `petal-open 0.9s ${0.15 + i * 0.12}s both` }}
                 />
               </Link>
             );
           })}
 
-          {/* център = Карина */}
           <Link href="/za-men">
             <circle
               className="petal-nav-item"
-              cx="110"
-              cy="110"
-              r="17"
-              fill="var(--pillar-karina)"
+              cx="100"
+              cy="100"
+              r="7"
+              fill="#b0379a"
               onMouseEnter={() => setHovered('center')}
               onMouseLeave={() => setHovered(null)}
               style={{ animation: 'petal-open 0.9s 0.1s both' }}
@@ -113,7 +106,6 @@ export function FlowerNav() {
           </Link>
         </svg>
 
-        {/* HTML етикети върху листата */}
         {PETALS.map((p) => (
           <Link
             key={p.href}
@@ -122,7 +114,7 @@ export function FlowerNav() {
             onMouseLeave={() => setHovered(null)}
             style={{
               position: 'absolute',
-              ...labelPos[p.pos],
+              ...labelStyle[p.labelPos],
               textAlign: 'center',
               whiteSpace: 'nowrap',
               opacity: hovered && hovered !== p.href ? 0.4 : 1,
@@ -130,26 +122,18 @@ export function FlowerNav() {
             }}
           >
             <div style={{ fontFamily: 'var(--serif)', fontSize: 19, color: 'var(--text)' }}>{p.label}</div>
-            <div style={{ fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--mid)' }}>
-              {p.sub}
-            </div>
+            <div style={{ fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--mid)' }}>{p.sub}</div>
           </Link>
         ))}
 
-        {/* етикет за центъра */}
         <div
           style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            textAlign: 'center',
-            pointerEvents: 'none',
-            opacity: hovered === 'center' ? 1 : 0,
-            transition: 'opacity 0.3s',
+            position: 'absolute', top: '50%', left: '50%',
+            transform: 'translate(-50%, -50%)', textAlign: 'center',
+            pointerEvents: 'none', opacity: hovered === 'center' ? 1 : 0, transition: 'opacity 0.3s',
           }}
         >
-          <div style={{ fontFamily: 'var(--serif)', fontSize: 14, color: 'white' }}>Карина</div>
+          <div style={{ fontFamily: 'var(--serif)', fontSize: 13, color: '#fff', textShadow: '0 1px 4px rgba(0,0,0,0.4)' }}>Карина</div>
         </div>
       </div>
     </div>

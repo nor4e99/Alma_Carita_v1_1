@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useScrollReveal } from '@/lib/utils/useScrollReveal';
 import { FlowerNav } from '@/components/public/FlowerNav';
+import { FlowerMark } from '@/components/shared/Logo';
 
 type PillarPreview = {
   href: string;
@@ -50,6 +51,11 @@ export function HomeExperience() {
         <div className="blob" style={{ width: 300, height: 300, background: 'var(--sage-soft)', top: '40%', left: '50%', animationDelay: '11s' }} />
 
         <div style={{ position: 'relative', zIndex: 2, maxWidth: 760 }}>
+          <div className="fade-up" style={{ display: 'flex', justifyContent: 'center', marginBottom: 28, animationDelay: '0.05s' }}>
+            <div style={{ animation: 'float-soft 6s ease-in-out infinite' }}>
+              <FlowerMark size={104} idSuffix="hero" />
+            </div>
+          </div>
           <div className="eyebrow fade-up" style={{ animationDelay: '0.1s', marginBottom: 24 }}>
             Карина Вълканова
           </div>

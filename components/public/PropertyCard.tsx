@@ -39,8 +39,14 @@ export function PropertyCard({ property, showStatus = false }: PropertyCardProps
         style={{ position: 'relative', display: 'block', aspectRatio: '4 / 3', overflow: 'hidden' }}
       >
         <div
-          className={cover?.gradient ?? 'g1'}
-          style={{ position: 'absolute', inset: 0 }}
+          className={cover?.url ? undefined : (cover?.gradient ?? 'g1')}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundImage: cover?.url ? `url(${cover.url})` : undefined,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
         />
         <div
           style={{

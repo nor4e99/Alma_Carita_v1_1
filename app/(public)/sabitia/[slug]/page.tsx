@@ -14,7 +14,18 @@ export default async function EventDetailPage({ params }: { params: { slug: stri
 
   return (
     <div className="pillar-sabitia">
-      <section className={ev.gallery[0] ?? 'g1'} style={{ position: 'relative', minHeight: 380, display: 'flex', alignItems: 'flex-end' }}>
+      <section
+        className={ev.gallery[0]?.startsWith('/') ? undefined : (ev.gallery[0] ?? 'g1')}
+        style={{
+          position: 'relative',
+          minHeight: 380,
+          display: 'flex',
+          alignItems: 'flex-end',
+          backgroundImage: ev.gallery[0]?.startsWith('/') ? `url(${ev.gallery[0]})` : undefined,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(58,48,40,0.5), transparent 60%)' }} />
         <div style={{ position: 'relative', zIndex: 2, padding: 'clamp(32px, 6vw, 72px)', maxWidth: 900 }}>
           <Link href="/sabitia" style={{ fontSize: 12, color: 'rgba(250,247,242,0.85)', marginBottom: 16, display: 'inline-block' }}>
@@ -46,7 +57,17 @@ export default async function EventDetailPage({ params }: { params: { slug: stri
         {ev.gallery.length > 1 && (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 14 }}>
             {ev.gallery.map((g, i) => (
-              <div key={i} className={g} style={{ aspectRatio: '4/3', borderRadius: 'var(--r-md)' }} />
+              <div
+                key={i}
+                className={g.startsWith('/') ? undefined : g}
+                style={{
+                  aspectRatio: '4/3',
+                  borderRadius: 'var(--r-md)',
+                  backgroundImage: g.startsWith('/') ? `url(${g})` : undefined,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              />
             ))}
           </div>
         )}

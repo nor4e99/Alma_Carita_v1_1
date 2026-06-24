@@ -31,7 +31,7 @@ export const mockProperties: Property[] = [
       'Светъл и просторен тристаен апартамент с панорамна гледка към планината Витоша. Намира се в нова, модерна сграда с асансьор, портиер и подземен паркинг. Завършен с висококачествени материали — естествен дъбов паркет, гранитогрес в банята, италианска кухня.',
     features: ['Паркомясто', 'Тераса', 'Климатик', 'Асансьор', 'Портиер', 'Гледка към планина'],
     images: [
-      { id: 'img-1-1', url: '', gradient: 'g1', isCover: true },
+      { id: 'img-1-1', url: '/images/properties/sofia-facade.jpg', gradient: 'g1', isCover: true },
       { id: 'img-1-2', url: '', gradient: 'g4' },
       { id: 'img-1-3', url: '', gradient: 'g7' },
     ],
@@ -64,9 +64,9 @@ export const mockProperties: Property[] = [
       'Самостоятелна къща с частна градина в спокойния квартал Бояна. Три нива, два камина, голяма всекидневна с излаз към озеленен двор. Подходяща за семейство, което търси тишина и природа близо до центъра.',
     features: ['Градина 350м²', 'Гараж за 2 коли', 'Камина', 'Веранда', 'Сауна'],
     images: [
-      { id: 'img-2-1', url: '', gradient: 'g2', isCover: true },
-      { id: 'img-2-2', url: '', gradient: 'g6' },
-      { id: 'img-2-3', url: '', gradient: 'g3' },
+      { id: 'img-2-1', url: '/images/properties/villa-garden.jpg', gradient: 'g2', isCover: true },
+      { id: 'img-2-2', url: '/images/properties/pool-mosaic.jpg', gradient: 'g6' },
+      { id: 'img-2-3', url: '/images/properties/pool-vines.jpg', gradient: 'g3' },
     ],
     energy_class: 'A+',
     orientation: 'Юг',
@@ -162,7 +162,7 @@ export const mockProperties: Property[] = [
       'Дълбоко реставрирана къща от 30-те години — запазени оригинални елементи, модерна инсталация. Двор с орех. Уникален обект за ценител на автентичната архитектура.',
     features: ['Двор 200м²', 'Оригинална фасада', 'Камина', 'Изба', 'Старо орехово дърво'],
     images: [
-      { id: 'img-5-1', url: '', gradient: 'g6', isCover: true },
+      { id: 'img-5-1', url: '/images/properties/villa-garden.jpg', gradient: 'g6', isCover: true },
       { id: 'img-5-2', url: '', gradient: 'g3' },
     ],
     energy_class: 'C',

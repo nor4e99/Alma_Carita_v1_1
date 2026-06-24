@@ -1,38 +1,34 @@
+import Image from 'next/image';
+
 interface LogoProps {
   size?: number;
   variant?: 'default' | 'light';
   showText?: boolean;
 }
 
-let gradientId = 0;
-
-export function Logo({ size = 36, variant = 'default', showText = true }: LogoProps) {
-  // Уникален id за всеки render да не collide-ва в SSR
-  const id = `ac-logo-grad-${++gradientId}`;
+/**
+ * Лого на Alma Carita — официалното четирилистно цвете с аура.
+ * Nav използва истинския PNG mark за точност спрямо бранда.
+ */
+export function Logo({ size = 40, variant = 'default', showText = true }: LogoProps) {
   const textColor = variant === 'light' ? '#faf7f2' : '#3a3028';
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-      <svg width={size} height={size} viewBox="0 0 44 44" fill="none">
-        <circle cx="22" cy="22" r="20" fill={`url(#${id})`} />
-        <ellipse cx="22" cy="14" rx="5" ry="8" fill="#6aaa7a" />
-        <ellipse cx="30" cy="22" rx="8" ry="5" fill="#7a8fbb" />
-        <ellipse cx="22" cy="30" rx="5" ry="8" fill="#e07848" />
-        <ellipse cx="14" cy="22" rx="8" ry="5" fill="#d4b840" />
-        <circle cx="22" cy="22" r="2.5" fill="#c04060" />
-        <defs>
-          <radialGradient id={id} cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#f0c070" stopOpacity="0.5" />
-            <stop offset="100%" stopColor="#b090c8" stopOpacity="0.25" />
-          </radialGradient>
-        </defs>
-      </svg>
+      <Image
+        src="/images/brand/logo-mark.png"
+        alt="Alma Carita"
+        width={size}
+        height={size}
+        style={{ display: 'block', objectFit: 'contain' }}
+        priority
+      />
       {showText && (
         <span
           style={{
             fontFamily: 'var(--serif)',
-            fontSize: size * 0.55,
-            letterSpacing: '0.05em',
+            fontSize: size * 0.52,
+            letterSpacing: '0.04em',
             color: textColor,
             fontWeight: 400,
           }}
@@ -44,28 +40,60 @@ export function Logo({ size = 36, variant = 'default', showText = true }: LogoPr
   );
 }
 
-/** Декоративен flower за hero/cta секции */
-export function FlowerDecoration({ size = 500, opacity = 0.06 }: { size?: number; opacity?: number }) {
+/**
+ * SVG версия на цветето — точните форми на венчелистчетата
+ * (горно/долно заострени капки, ляво/дясно бадеми) + аура.
+ * Използва се за анимирани/декоративни нужди.
+ *
+ * Petal пътеки около център (100,100):
+ *   - заострена капка нагоре, после ротация за всяко листо
+ */
+const PETAL_TEARDROP = 'M100 100 C 80 70, 84 34, 100 18 C 116 34, 120 70, 100 100 Z';
+const PETAL_ALMOND = 'M100 100 C 70 84, 40 86, 22 100 C 40 114, 70 116, 100 100 Z';
+
+export function FlowerMark({ size = 200, withAura = true, idSuffix = '' }: { size?: number; withAura?: boolean; idSuffix?: string }) {
+  const gid = `ac-aura-${idSuffix || 'x'}`;
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 200 200"
+    <svg width={size} height={size} viewBox="0 0 200 200" fill="none" style={{ overflow: 'visible' }}>
+      <defs>
+        <radialGradient id={gid} cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#fbe3a8" stopOpacity="0.95" />
+          <stop offset="42%" stopColor="#f4a98a" stopOpacity="0.55" />
+          <stop offset="72%" stopColor="#c9a0d8" stopOpacity="0.4" />
+          <stop offset="100%" stopColor="#b9a3da" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      {withAura && <circle cx="100" cy="100" r="96" fill={`url(#${gid})`} />}
+      {/* Зелено — горе */}
+      <path d={PETAL_TEARDROP} fill="#4f9e4a" />
+      {/* Оранжево — долу (ротация 180) */}
+      <path d={PETAL_TEARDROP} fill="#e8702a" transform="rotate(180 100 100)" />
+      {/* Синьо — дясно */}
+      <path d={PETAL_ALMOND} fill="#3b56a6" transform="rotate(180 100 100)" />
+      {/* Жълто — ляво */}
+      <path d={PETAL_ALMOND} fill="#f4c430" />
+      {/* Център */}
+      <circle cx="100" cy="100" r="6" fill="#b0379a" />
+    </svg>
+  );
+}
+
+/** Декоративен flower за hero/cta секции (бавно дишащ) */
+export function FlowerDecoration({ size = 500, opacity = 0.5 }: { size?: number; opacity?: number }) {
+  return (
+    <div
       style={{
         opacity,
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        animation: 'spin-slow 40s linear infinite',
+        animation: 'flower-spin-breathe 16s ease-in-out infinite',
         pointerEvents: 'none',
+        filter: 'blur(0.3px)',
       }}
     >
-      <ellipse cx="100" cy="60" rx="28" ry="52" fill="#6aaa7a" />
-      <ellipse cx="140" cy="100" rx="52" ry="28" fill="#7a8fbb" />
-      <ellipse cx="100" cy="140" rx="28" ry="52" fill="#e07848" />
-      <ellipse cx="60" cy="100" rx="52" ry="28" fill="#d4b840" />
-      <circle cx="100" cy="100" r="12" fill="#c04060" />
-    </svg>
+      <FlowerMark size={size} idSuffix="deco" />
+    </div>
   );
 }

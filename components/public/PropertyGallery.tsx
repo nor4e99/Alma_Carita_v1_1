@@ -26,8 +26,14 @@ export function PropertyGallery({ images }: Props) {
         }}
       >
         <div
-          className={current.gradient ?? 'g1'}
-          style={{ position: 'absolute', inset: 0 }}
+          className={current.url ? undefined : (current.gradient ?? 'g1')}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundImage: current.url ? `url(${current.url})` : undefined,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
         />
         <div
           style={{
@@ -115,7 +121,16 @@ export function PropertyGallery({ images }: Props) {
                 padding: 0,
               }}
             >
-              <div className={img.gradient ?? 'g1'} style={{ width: '100%', height: '100%' }} />
+              <div
+                className={img.url ? undefined : (img.gradient ?? 'g1')}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundImage: img.url ? `url(${img.url})` : undefined,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              />
             </button>
           ))}
         </div>
