@@ -17,6 +17,7 @@ const links = [
 export function PublicNav() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const favCount = useFavoritesCount();
 
   useEffect(() => {
@@ -26,56 +27,99 @@ export function PublicNav() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
+
   return (
-    <nav
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 50,
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '20px 48px',
-        background: scrolled ? 'rgba(250,247,242,0.92)' : 'transparent',
-        backdropFilter: scrolled ? 'blur(16px)' : 'none',
-        borderBottom: scrolled ? '1px solid var(--line)' : '1px solid transparent',
-        transition: 'all 0.4s',
-      }}
-    >
-      <Link href="/">
-        <Logo size={36} />
-      </Link>
-
-      <div style={{ display: 'flex', gap: 36, alignItems: 'center' }}>
-        {links.map((link) => {
-          const isActive = pathname === link.href || pathname.startsWith(link.href + '/');
-          return (
-            <Link
-              key={link.href}
-              href={link.href}
-              style={{
-                fontSize: 11,
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                color: isActive ? 'var(--text)' : 'var(--mid)',
-                transition: 'color 0.25s',
-                fontWeight: 400,
-              }}
-            >
-              {link.label}
-            </Link>
-          );
-        })}
-      </div>
-
-      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-        <Link href="/imoti?fav=1" className="btn btn-ghost btn-sm" style={{ position: 'relative' }}>
-          ♡ Запазени{favCount > 0 ? ` · ${favCount}` : ''}
+    <>
+      <nav className="public-nav" data-scrolled={scrolled}>
+        <Link href="/">
+          <Logo size={36} />
         </Link>
-        <Link href="/kontakt" className="btn btn-primary btn-sm">
-          Запитване
-        </Link>
-      </div>
-    </nav>
+
+        {/* Desktop links */}
+        <div className="nav-desktop-links">
+          {links.map((link) => {
+            const isActive = pathname === link.href || pathname.startsWith(link.href + '/');
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="nav-link"
+                data-active={isActive}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Desktop actions */}
+        <div className="nav-desktop-actions">
+          <Link href="/imoti?fav=1" className="btn btn-ghost btn-sm" style={{ position: 'relative' }}>
+            ♡ Запазени{favCount > 0 ? ` · ${favCount}` : ''}
+          </Link>
+          <Link href="/kontakt" className="btn btn-primary btn-sm">
+            Запитване
+          </Link>
+        </div>
+
+        {/* Mobile hamburger */}
+        <button
+          className="nav-mobile-toggle"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label={mobileOpen ? 'Затвори менюто' : 'Отвори менюто'}
+        >
+          <span className={`hamburger ${mobileOpen ? 'open' : ''}`}>
+            <span />
+            <span />
+            <span />
+          </span>
+        </button>
+      </nav>
+
+      {/* Mobile menu overlay */}
+      {mobileOpen && (
+        <div className="nav-mobile-overlay" onClick={() => setMobileOpen(false)}>
+          <div className="nav-mobile-menu" onClick={(e) => e.stopPropagation()}>
+            <div className="nav-mobile-links">
+              {links.map((link) => {
+                const isActive = pathname === link.href || pathname.startsWith(link.href + '/');
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="nav-mobile-link"
+                    data-active={isActive}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </div>
+            <div className="nav-mobile-actions">
+              <Link href="/imoti?fav=1" className="btn btn-ghost" style={{ width: '100%' }}>
+                ♡ Запазени{favCount > 0 ? ` · ${favCount}` : ''}
+              </Link>
+              <Link href="/kontakt" className="btn btn-primary" style={{ width: '100%' }}>
+                Запитване
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

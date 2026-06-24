@@ -101,13 +101,7 @@ export function HomeExperience() {
           {STORY.map((s, i) => (
             <div
               key={i}
-              className="reveal"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'minmax(0, 150px) 1fr',
-                gap: 'clamp(20px, 5vw, 56px)',
-                alignItems: 'start',
-              }}
+              className="reveal story-item"
             >
               <div data-parallax="0.5" style={{ fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--purple)', paddingTop: 14 }}>
                 <span style={{ display: 'block', fontSize: 28, fontFamily: 'var(--serif)', color: 'var(--c-sacral)', marginBottom: 8, opacity: 0.5 }}>0{i + 1}</span>

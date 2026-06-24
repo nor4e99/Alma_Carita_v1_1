@@ -66,7 +66,7 @@ export function PropertiesCatalog({ initialProperties }: PropertiesCatalogProps)
   }, [initialProperties, type, search, priceMax, roomsMin, sort, favOnly, favorites]);
 
   return (
-    <div style={{ maxWidth: 1400, margin: '0 auto', padding: '60px 48px 120px' }}>
+    <div className="catalog-container">
       {/* Header */}
       <div style={{ marginBottom: 56 }}>
         <div className="eyebrow" style={{ marginBottom: 12 }}>
@@ -81,19 +81,7 @@ export function PropertiesCatalog({ initialProperties }: PropertiesCatalogProps)
       </div>
 
       {/* Filters */}
-      <div
-        style={{
-          background: 'white',
-          borderRadius: 24,
-          padding: 24,
-          marginBottom: 40,
-          border: '1px solid var(--line)',
-          display: 'grid',
-          gridTemplateColumns: '2fr 1fr 1fr 1fr auto',
-          gap: 16,
-          alignItems: 'end',
-        }}
-      >
+      <div className="catalog-filters">
         <div className="field">
           <span className="field-label">Търсене</span>
           <input
@@ -225,13 +213,7 @@ export function PropertiesCatalog({ initialProperties }: PropertiesCatalogProps)
           </p>
         </div>
       ) : (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-            gap: 28,
-          }}
-        >
+        <div className="catalog-grid">
           {filtered.map((p) => (
             <PropertyCard key={p.id} property={p} />
           ))}
