@@ -1,0 +1,269 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap');
+@import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cream: #faf7f2;
+  --cream-2: #f5f0e8;
+  --cream-3: #ede4d6;
+  --lavender: #d4cce8;
+  --lavender-soft: #e6e0f0;
+  --blush: #efd8c8;
+  --blush-soft: #f6e8dc;
+  --sage: #a8c4a0;
+  --sage-soft: #cfdec9;
+  --amber: #e8d090;
+  --amber-soft: #f0e3b8;
+  --coral: #e8a880;
+  --soft-blue: #a8b8d4;
+  --purple: #b8add4;
+  --c-root: #c04060;
+  --c-sacral: #e07848;
+  --c-solar: #d4b840;
+  --c-heart: #6aaa7a;
+  --c-throat: #7a8fbb;
+  --c-third: #9080b8;
+  --c-crown: #b090c8;
+  --text: #3a3028;
+  --mid: #7a6e64;
+  --light: #b0a49a;
+  --line: rgba(180, 160, 140, 0.18);
+  --line-strong: rgba(180, 160, 140, 0.32);
+  --serif: 'Cormorant Garamond', serif;
+  --sans: 'Jost', sans-serif;
+  --r-sm: 12px;
+  --r-md: 20px;
+  --r-lg: 28px;
+  --r-xl: 40px;
+  --shadow-sm: 0 4px 16px rgba(58, 48, 40, 0.06);
+  --shadow-md: 0 16px 48px rgba(58, 48, 40, 0.08);
+  --shadow-lg: 0 32px 80px rgba(58, 48, 40, 0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  background: var(--cream);
+  color: var(--text);
+  font-family: var(--sans);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: var(--sans); cursor: pointer; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  font-family: var(--sans); font-weight: 400; font-size: 12px;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  padding: 14px 28px; border-radius: 999px; border: 1px solid transparent;
+  cursor: pointer; transition: all 0.3s;
+}
+.btn-primary { background: var(--text); color: var(--cream); }
+.btn-primary:hover { background: #211a14; }
+.btn-ghost { background: transparent; color: var(--text); border-color: var(--line-strong); }
+.btn-ghost:hover { background: rgba(58, 48, 40, 0.04); }
+.btn-soft { background: var(--cream-2); color: var(--text); }
+.btn-soft:hover { background: var(--cream-3); }
+.btn-sm { padding: 10px 18px; font-size: 11px; letter-spacing: 0.14em; }
+.btn-icon { width: 40px; height: 40px; border-radius: 50%; padding: 0; display: inline-flex; align-items: center; justify-content: center; }
+
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--cream-2); color: var(--mid);
+  padding: 7px 14px; border-radius: 999px;
+  font-size: 11px; letter-spacing: 0.08em;
+  border: 1px solid var(--line); cursor: pointer; transition: all 0.2s;
+}
+.pill:hover { border-color: var(--line-strong); }
+.pill.is-active { background: var(--text); color: var(--cream); border-color: var(--text); }
+
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field-label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mid); }
+.input, .select, .textarea {
+  font-family: var(--sans); font-weight: 300; font-size: 14px;
+  color: var(--text); background: white; border: 1px solid var(--line);
+  border-radius: 14px; padding: 14px 16px; outline: none;
+  transition: border 0.25s, box-shadow 0.25s; width: 100%;
+}
+.input:focus, .select:focus, .textarea:focus { border-color: var(--text); box-shadow: 0 0 0 4px rgba(58, 48, 40, 0.05); }
+.textarea { resize: vertical; min-height: 120px; }
+
+.eyebrow { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--purple); }
+.h-display { font-family: var(--serif); font-weight: 300; line-height: 1.05; letter-spacing: -0.005em; }
+.h-display em { font-style: italic; color: var(--mid); }
+
+.g1 { background: linear-gradient(135deg, #c8d8e0 0%, #d4cce8 50%, #e8c8b0 100%); }
+.g2 { background: linear-gradient(135deg, #d4e8d0 0%, #b8d4b0 50%, #e8e0a0 100%); }
+.g3 { background: linear-gradient(135deg, #e8d4c0 0%, #e0c4b0 50%, #d4c8e0 100%); }
+.g4 { background: linear-gradient(135deg, #c0d0e0 0%, #a8b8d4 50%, #d0c8e8 100%); }
+.g5 { background: linear-gradient(135deg, #e8e0c0 0%, #d4c880 50%, #e0d0b0 100%); }
+.g6 { background: linear-gradient(135deg, #d8e8e0 0%, #b8d0c4 50%, #e0d8c0 100%); }
+.g7 { background: linear-gradient(135deg, #e8c8d4 0%, #d8b8c8 50%, #e0c4b8 100%); }
+.g8 { background: linear-gradient(135deg, #c4d4e8 0%, #b8c8e0 50%, #d8d0e8 100%); }
+
+.status { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+.status .dot { width: 6px; height: 6px; border-radius: 50%; }
+.status-active { background: rgba(168, 196, 160, 0.18); color: #5e8056; }
+.status-active .dot { background: var(--c-heart); }
+.status-pending { background: rgba(232, 208, 144, 0.22); color: #957d3e; }
+.status-pending .dot { background: var(--c-solar); }
+.status-sold { background: rgba(122, 142, 187, 0.18); color: #4f5d7d; }
+.status-sold .dot { background: var(--c-throat); }
+.status-rented { background: rgba(212, 204, 232, 0.35); color: #6a5c8a; }
+.status-rented .dot { background: var(--c-crown); }
+.status-draft { background: rgba(176, 164, 154, 0.18); color: var(--mid); }
+.status-draft .dot { background: var(--light); }
+
+.price-marker {
+  background: white; padding: 6px 12px; border-radius: 999px;
+  font-family: var(--sans); font-size: 12px; font-weight: 500;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  border: 2px solid white; white-space: nowrap;
+  color: var(--text); transition: all 0.2s;
+}
+.price-marker.new { border-color: #7a8fbb; }
+.price-marker.old { border-color: #e07848; }
+.price-marker.land { border-color: #6aaa7a; }
+.price-marker:hover { transform: scale(1.1); background: var(--text); color: var(--cream); border-color: var(--text); z-index: 1000 !important; }
+
+.leaflet-popup-content-wrapper { border-radius: 16px !important; box-shadow: var(--shadow-md) !important; font-family: var(--sans) !important; }
+.leaflet-popup-content { padding: 4px 2px; font-size: 13px; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes breathe { 0%, 100% { opacity: 0.8; transform: scale(1); } 50% { opacity: 1; transform: scale(1.03); } }
+.fade-up { animation: fadeUp 0.8s ease-out both; }
+.fade-in { animation: fadeIn 0.6s ease-out both; }
+
+/* ============================================================
+   IMMERSIVE LAYER — 4 стълба, дълбочина, morph, scrollytelling
+   Цветето = картата на сайта. Всяко листо е стълб.
+   ============================================================ */
+
+:root {
+  /* Стълб → цвят (от венчелистчетата на логото) */
+  --pillar-imoti: var(--c-heart);      /* 🟢 горно — пространство/дом */
+  --pillar-obuchenia: var(--c-throat); /* 🔵 дясно — знание/развитие */
+  --pillar-detsa: var(--c-sacral);     /* 🟠 долно — топлина/грижа */
+  --pillar-sabitia: var(--c-solar);    /* 🟡 ляво — памет/общност */
+  --pillar-karina: var(--c-root);      /* 🔴 център — сърцето */
+}
+
+/* Per-pillar акцент — слага се като class на section/страница */
+.pillar-imoti { --accent: var(--pillar-imoti); }
+.pillar-obuchenia { --accent: var(--pillar-obuchenia); }
+.pillar-detsa { --accent: var(--pillar-detsa); }
+.pillar-sabitia { --accent: var(--pillar-sabitia); }
+.pillar-karina { --accent: var(--pillar-karina); }
+
+/* ---- Дълбочина / 3D scroll сцена ---- */
+.scene {
+  perspective: 1400px;
+  perspective-origin: 50% 30%;
+}
+.depth-layer {
+  will-change: transform;
+  transition: transform 0.1s linear;
+}
+
+/* Reveal при scroll — стартово състояние, .in добавя се от JS */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
+.reveal-d1 { transition-delay: 0.08s; }
+.reveal-d2 { transition-delay: 0.16s; }
+.reveal-d3 { transition-delay: 0.24s; }
+.reveal-d4 { transition-delay: 0.32s; }
+
+/* Морфиращ blob фон — за hero атмосфера */
+@keyframes morph-blob {
+  0%, 100% { border-radius: 42% 58% 63% 37% / 42% 38% 62% 58%; }
+  33% { border-radius: 58% 42% 38% 62% / 63% 58% 42% 37%; }
+  66% { border-radius: 38% 62% 58% 42% / 48% 52% 48% 52%; }
+}
+.blob {
+  position: absolute;
+  filter: blur(40px);
+  opacity: 0.5;
+  animation: morph-blob 18s ease-in-out infinite;
+  will-change: border-radius, transform;
+  pointer-events: none;
+}
+
+/* Логото-цвете: разтваряне на венчелистчетата */
+@keyframes petal-open {
+  from { transform: scale(0.2) rotate(-30deg); opacity: 0; }
+  to { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+@keyframes flower-spin-breathe {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(8deg) scale(1.04); }
+}
+.flower-petal { transform-origin: center; transform-box: fill-box; }
+
+/* Float за орбитиращи елементи */
+@keyframes float-soft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Цвете-навигатор: венчелистче hover */
+.petal-nav-item {
+  cursor: pointer;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+.petal-nav-item:hover {
+  transform: scale(1.12);
+  filter: drop-shadow(0 8px 24px rgba(58, 48, 40, 0.25));
+}
+
+/* Accent-tinted card hover (използва --accent от .pillar-*) */
+.accent-card {
+  position: relative;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s;
+}
+.accent-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--line);
+  transition: box-shadow 0.4s;
+  pointer-events: none;
+}
+.accent-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+.accent-card:hover::before { box-shadow: inset 0 0 0 1.5px var(--accent, var(--line-strong)); }
+
+/* Голяма scrollytelling типография */
+.story-line {
+  font-family: var(--serif);
+  font-weight: 300;
+  line-height: 1.14;
+  font-size: clamp(28px, 4.4vw, 64px);
+  letter-spacing: -0.01em;
+}
+.story-line em { font-style: italic; color: var(--accent, var(--mid)); }
+
+/* Section vertical rhythm */
+.section-pad { padding: clamp(80px, 12vh, 160px) clamp(20px, 6vw, 80px); }
+
+/* Уважение към reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
