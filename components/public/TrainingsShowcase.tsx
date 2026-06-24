@@ -3,9 +3,11 @@
 import Link from 'next/link';
 import type { Training } from '@/lib/types';
 import { useScrollReveal } from '@/lib/utils/useScrollReveal';
+import { useParallax } from '@/lib/utils/useParallax';
 
 export function TrainingsShowcase({ trainings }: { trainings: Training[] }) {
   useScrollReveal();
+  useParallax();
 
   return (
     <div className="pillar-obuchenia scene">
@@ -18,7 +20,7 @@ export function TrainingsShowcase({ trainings }: { trainings: Training[] }) {
           textAlign: 'center',
         }}
       >
-        <div className="blob" style={{ width: 380, height: 380, background: 'var(--accent)', opacity: 0.16, top: '5%', right: '12%' }} />
+        <div data-parallax="1.0" className="blob" style={{ width: 380, height: 380, background: 'var(--accent)', opacity: 0.16, top: '5%', right: '12%' }} />
         <div style={{ position: 'relative', zIndex: 2, maxWidth: 720, margin: '0 auto' }}>
           <div className="eyebrow fade-up" style={{ color: 'var(--accent)', marginBottom: 24 }}>
             Обучения · знание и развитие

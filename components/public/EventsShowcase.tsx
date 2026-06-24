@@ -3,10 +3,12 @@
 import Link from 'next/link';
 import type { EventItem } from '@/lib/types';
 import { useScrollReveal } from '@/lib/utils/useScrollReveal';
+import { useParallax } from '@/lib/utils/useParallax';
 import { formatDate } from '@/lib/utils/format';
 
 export function EventsShowcase({ events }: { events: EventItem[] }) {
   useScrollReveal();
+  useParallax();
 
   return (
     <div className="pillar-sabitia scene">
@@ -19,7 +21,7 @@ export function EventsShowcase({ events }: { events: EventItem[] }) {
           textAlign: 'center',
         }}
       >
-        <div className="blob" style={{ width: 360, height: 360, background: 'var(--accent)', opacity: 0.16, top: '8%', left: '14%' }} />
+        <div data-parallax="1.0" className="blob" style={{ width: 360, height: 360, background: 'var(--accent)', opacity: 0.16, top: '8%', left: '14%' }} />
         <div style={{ position: 'relative', zIndex: 2, maxWidth: 720, margin: '0 auto' }}>
           <div className="eyebrow fade-up" style={{ color: 'var(--accent)', marginBottom: 24 }}>
             Събития · мигове и памет

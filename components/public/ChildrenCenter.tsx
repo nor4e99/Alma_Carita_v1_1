@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useScrollReveal } from '@/lib/utils/useScrollReveal';
+import { useParallax } from '@/lib/utils/useParallax';
 import { submitChildrenInterest } from '@/lib/actions';
 
 const PRINCIPLES = [
@@ -13,6 +14,7 @@ const PRINCIPLES = [
 
 export function ChildrenCenter() {
   useScrollReveal();
+  useParallax();
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
   const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle');
 
@@ -50,8 +52,8 @@ export function ChildrenCenter() {
           padding: 'clamp(120px, 16vh, 180px) clamp(20px, 6vw, 80px) clamp(60px, 10vh, 100px)',
         }}
       >
-        <div className="blob" style={{ width: 420, height: 420, background: 'var(--accent)', opacity: 0.18, top: '10%', right: '10%' }} />
-        <div className="blob" style={{ width: 340, height: 340, background: 'var(--blush)', bottom: '8%', left: '12%', animationDelay: '7s' }} />
+        <div data-parallax="0.6" className="blob" style={{ width: 420, height: 420, background: 'var(--accent)', opacity: 0.18, top: '10%', right: '10%' }} />
+        <div data-parallax="1.0" className="blob" style={{ width: 340, height: 340, background: 'var(--blush)', bottom: '8%', left: '12%', animationDelay: '7s' }} />
         <div style={{ position: 'relative', zIndex: 2, maxWidth: 760 }}>
           <div className="eyebrow fade-up" style={{ color: 'var(--accent)', marginBottom: 24 }}>
             Детски център · грижа и игра

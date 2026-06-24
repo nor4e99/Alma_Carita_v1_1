@@ -1,38 +1,78 @@
-import Image from 'next/image';
-
 interface LogoProps {
   size?: number;
   variant?: 'default' | 'light';
   showText?: boolean;
 }
 
+// Венчелистчета, радиращи от център (100,100) — пред-завъртени
+const PETAL_UP = 'M 100 100 C 78 72, 80 34, 100 15 C 120 34, 122 72, 100 100 Z';
+const PETAL_RIGHT = 'M 100 100 C 128 78, 166 80, 185 100 C 166 120, 128 122, 100 100 Z';
+const PETAL_DOWN = 'M 100 100 C 122 128, 120 166, 100 185 C 80 166, 78 128, 100 100 Z';
+const PETAL_LEFT = 'M 100 100 C 72 122, 34 120, 15 100 C 34 80, 72 78, 100 100 Z';
+
+// Глобален брояч — гарантира УНИКАЛНИ gradient id-та за всеки FlowerMark,
+// дори когато на страницата има много екземпляри (nav, hero, орбити...).
+let __flowerSeq = 0;
+
 /**
- * Лого на Alma Carita — официалното четирилистно цвете с аура.
- * Nav използва истинския PNG mark за точност спрямо бранда.
+ * SVG цветето на Alma Carita — четирилистно, с аура.
+ * Зелено горе, синьо дясно, оранжево долу, жълто ляво, магента център.
  */
-export function Logo({ size = 40, variant = 'default', showText = true }: LogoProps) {
-  const textColor = variant === 'light' ? '#faf7f2' : '#3a3028';
+export function FlowerMark({
+  size = 200,
+  withAura = true,
+}: {
+  size?: number;
+  withAura?: boolean;
+  /** @deprecated вече не е нужен — id-тата са глобално уникални */
+  idSuffix?: string;
+}) {
+  const uid = `f${++__flowerSeq}`;
+  const a = `${uid}-aura`;
+  const green = `${uid}-green`;
+  const blue = `${uid}-blue`;
+  const orange = `${uid}-orange`;
+  const yellow = `${uid}-yellow`;
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-      <Image
-        src="/images/brand/logo-mark.png"
-        alt="Alma Carita"
-        width={size}
-        height={size}
-        style={{ display: 'block', objectFit: 'contain' }}
-        priority
-      />
+    <svg width={size} height={size} viewBox="0 0 200 200" fill="none" style={{ overflow: 'visible', display: 'block' }}>
+      <defs>
+        <radialGradient id={a} cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#fbe3a8" stopOpacity="0.9" />
+          <stop offset="45%" stopColor="#f4a98a" stopOpacity="0.5" />
+          <stop offset="74%" stopColor="#c9a0d8" stopOpacity="0.38" />
+          <stop offset="100%" stopColor="#b9a3da" stopOpacity="0" />
+        </radialGradient>
+        <radialGradient id={green} cx="50%" cy="30%" r="80%">
+          <stop offset="0%" stopColor="#5bb04f" /><stop offset="100%" stopColor="#3d8a37" />
+        </radialGradient>
+        <radialGradient id={blue} cx="70%" cy="50%" r="80%">
+          <stop offset="0%" stopColor="#4163bd" /><stop offset="100%" stopColor="#2e4a96" />
+        </radialGradient>
+        <radialGradient id={orange} cx="50%" cy="70%" r="80%">
+          <stop offset="0%" stopColor="#f07b2e" /><stop offset="100%" stopColor="#d05f18" />
+        </radialGradient>
+        <radialGradient id={yellow} cx="30%" cy="50%" r="80%">
+          <stop offset="0%" stopColor="#f7cd45" /><stop offset="100%" stopColor="#d9a818" />
+        </radialGradient>
+      </defs>
+      {withAura && <circle cx="100" cy="100" r="92" fill={`url(#${a})`} />}
+      <path d={PETAL_UP} fill={`url(#${green})`} />
+      <path d={PETAL_RIGHT} fill={`url(#${blue})`} />
+      <path d={PETAL_DOWN} fill={`url(#${orange})`} />
+      <path d={PETAL_LEFT} fill={`url(#${yellow})`} />
+      <circle cx="100" cy="100" r="6.5" fill="#b0379a" />
+    </svg>
+  );
+}
+
+export function Logo({ size = 40, variant = 'default', showText = true }: LogoProps) {
+  const textColor = variant === 'light' ? '#faf7f2' : '#3a3028';
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
+      <FlowerMark size={size} withAura />
       {showText && (
-        <span
-          style={{
-            fontFamily: 'var(--serif)',
-            fontSize: size * 0.52,
-            letterSpacing: '0.04em',
-            color: textColor,
-            fontWeight: 400,
-          }}
-        >
+        <span style={{ fontFamily: 'var(--serif)', fontSize: size * 0.52, letterSpacing: '0.04em', color: textColor, fontWeight: 400 }}>
           Alma Carita
         </span>
       )}
@@ -40,45 +80,7 @@ export function Logo({ size = 40, variant = 'default', showText = true }: LogoPr
   );
 }
 
-/**
- * SVG версия на цветето — точните форми на венчелистчетата
- * (горно/долно заострени капки, ляво/дясно бадеми) + аура.
- * Използва се за анимирани/декоративни нужди.
- *
- * Petal пътеки около център (100,100):
- *   - заострена капка нагоре, после ротация за всяко листо
- */
-const PETAL_TEARDROP = 'M100 100 C 80 70, 84 34, 100 18 C 116 34, 120 70, 100 100 Z';
-const PETAL_ALMOND = 'M100 100 C 70 84, 40 86, 22 100 C 40 114, 70 116, 100 100 Z';
-
-export function FlowerMark({ size = 200, withAura = true, idSuffix = '' }: { size?: number; withAura?: boolean; idSuffix?: string }) {
-  const gid = `ac-aura-${idSuffix || 'x'}`;
-  return (
-    <svg width={size} height={size} viewBox="0 0 200 200" fill="none" style={{ overflow: 'visible' }}>
-      <defs>
-        <radialGradient id={gid} cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#fbe3a8" stopOpacity="0.95" />
-          <stop offset="42%" stopColor="#f4a98a" stopOpacity="0.55" />
-          <stop offset="72%" stopColor="#c9a0d8" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="#b9a3da" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-      {withAura && <circle cx="100" cy="100" r="96" fill={`url(#${gid})`} />}
-      {/* Зелено — горе */}
-      <path d={PETAL_TEARDROP} fill="#4f9e4a" />
-      {/* Оранжево — долу (ротация 180) */}
-      <path d={PETAL_TEARDROP} fill="#e8702a" transform="rotate(180 100 100)" />
-      {/* Синьо — дясно */}
-      <path d={PETAL_ALMOND} fill="#3b56a6" transform="rotate(180 100 100)" />
-      {/* Жълто — ляво */}
-      <path d={PETAL_ALMOND} fill="#f4c430" />
-      {/* Център */}
-      <circle cx="100" cy="100" r="6" fill="#b0379a" />
-    </svg>
-  );
-}
-
-/** Декоративен flower за hero/cta секции (бавно дишащ) */
+/** Декоративен flower за hero/cta — бавно дишащ */
 export function FlowerDecoration({ size = 500, opacity = 0.5 }: { size?: number; opacity?: number }) {
   return (
     <div
@@ -90,10 +92,9 @@ export function FlowerDecoration({ size = 500, opacity = 0.5 }: { size?: number;
         transform: 'translate(-50%, -50%)',
         animation: 'flower-spin-breathe 16s ease-in-out infinite',
         pointerEvents: 'none',
-        filter: 'blur(0.3px)',
       }}
     >
-      <FlowerMark size={size} idSuffix="deco" />
+      <FlowerMark size={size} />
     </div>
   );
 }

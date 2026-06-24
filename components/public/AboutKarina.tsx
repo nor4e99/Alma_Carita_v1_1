@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useScrollReveal } from '@/lib/utils/useScrollReveal';
+import { useParallax } from '@/lib/utils/useParallax';
 
 const JOURNEY = [
   {
@@ -39,6 +40,7 @@ const VALUES = [
 
 export function AboutKarina() {
   useScrollReveal();
+  useParallax();
 
   return (
     <div className="pillar-karina scene">
@@ -51,7 +53,7 @@ export function AboutKarina() {
           background: 'linear-gradient(165deg, var(--cream) 0%, var(--cream-2) 45%, var(--lavender-soft) 100%)',
         }}
       >
-        <div className="blob" style={{ width: 400, height: 400, background: 'var(--lavender)', top: '6%', right: '8%' }} />
+        <div data-parallax="0.6" className="blob" style={{ width: 400, height: 400, background: 'var(--lavender)', top: '6%', right: '8%' }} />
         <div
           style={{
             position: 'relative',
@@ -102,21 +104,44 @@ export function AboutKarina() {
       </section>
 
       {/* Пътят — timeline */}
-      <section className="section-pad" style={{ maxWidth: 880, margin: '0 auto' }}>
-        <div className="reveal eyebrow" style={{ textAlign: 'center', marginBottom: 56 }}>Моят път</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(40px, 7vh, 72px)' }}>
-          {JOURNEY.map((j, i) => (
-            <div
-              key={i}
-              className={`reveal reveal-d${(i % 3) + 1}`}
-              style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 170px) 1fr', gap: 'clamp(20px, 5vw, 52px)', alignItems: 'start' }}
-            >
-              <div style={{ fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent)', paddingTop: 8, fontWeight: 400 }}>
-                {j.period}
+      <section className="section-pad" style={{ maxWidth: 1000, margin: '0 auto', position: 'relative' }}>
+        <div className="reveal eyebrow" style={{ textAlign: 'center', marginBottom: 'clamp(56px, 9vh, 100px)' }}>Моят път</div>
+
+        {/* мека вертикална нишка по средата */}
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute', top: 140, bottom: 80, left: '50%',
+            width: 1, background: 'linear-gradient(var(--line-strong), transparent)',
+            transform: 'translateX(-50%)', opacity: 0.5,
+          }}
+        />
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(64px, 12vh, 130px)' }}>
+          {JOURNEY.map((j, i) => {
+            const left = i % 2 === 0;
+            return (
+              <div
+                key={i}
+                className="reveal journey-row"
+              >
+                {/* периодът — голям, дишащ */}
+                <div className="journey-period" style={{ gridColumn: left ? 1 : 2, gridRow: 1, textAlign: left ? 'right' : 'left' }} data-parallax="0.4">
+                  <div className="journey-num" style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(40px, 6vw, 78px)', fontWeight: 300, color: 'var(--accent)', opacity: 0.25, lineHeight: 1 }}>
+                    0{i + 1}
+                  </div>
+                  <div style={{ fontSize: 'clamp(20px, 2.4vw, 30px)', fontFamily: 'var(--serif)', color: 'var(--text)', marginTop: 8 }}>
+                    {j.period}
+                  </div>
+                </div>
+
+                {/* текстът */}
+                <div className="journey-text" style={{ gridColumn: left ? 2 : 1, gridRow: 1, textAlign: 'left' }}>
+                  <p style={{ fontSize: 'clamp(16px, 1.7vw, 19px)', fontWeight: 300, lineHeight: 1.9, color: 'var(--mid)' }}>{j.text}</p>
+                </div>
               </div>
-              <p style={{ fontSize: 'clamp(15px, 1.6vw, 17px)', fontWeight: 300, lineHeight: 1.85, color: 'var(--text)' }}>{j.text}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
