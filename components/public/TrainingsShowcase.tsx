@@ -37,7 +37,7 @@ export function TrainingsShowcase({ trainings }: { trainings: Training[] }) {
 
       {/* Grid */}
       <section className="section-pad" style={{ paddingTop: 0, maxWidth: 1180, margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 28 }}>
+        <div className="trainings-grid">
           {trainings.map((t, i) => (
             <Link
               key={t.id}

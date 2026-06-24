@@ -60,11 +60,8 @@ export function AboutKarina() {
             zIndex: 2,
             maxWidth: 1100,
             margin: '0 auto',
-            display: 'grid',
-            gridTemplateColumns: 'minmax(0, 320px) 1fr',
-            gap: 'clamp(32px, 6vw, 72px)',
-            alignItems: 'center',
           }}
+          className="about-hero-grid"
         >
           <div className="fade-up" style={{ position: 'relative' }}>
             <div

@@ -52,7 +52,7 @@ export function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div className="form-row-2col">
         <div className="field">
           <span className="field-label">Име *</span>
           <input className="input" name="name" required />

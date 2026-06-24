@@ -41,12 +41,8 @@ export function EventsShowcase({ events }: { events: EventItem[] }) {
           <Link
             key={ev.id}
             href={`/sabitia/${ev.slug}`}
-            className={`reveal reveal-d${(i % 3) + 1} accent-card`}
+            className={`reveal reveal-d${(i % 3) + 1} accent-card event-card`}
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'minmax(0, 1.1fr) 1fr',
-              gap: 'clamp(20px, 4vw, 48px)',
-              alignItems: 'center',
               background: 'white',
               borderRadius: 'var(--r-lg)',
               overflow: 'hidden',

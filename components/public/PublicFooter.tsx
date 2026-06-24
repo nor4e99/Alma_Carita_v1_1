@@ -3,24 +3,8 @@ import { Logo } from '../shared/Logo';
 
 export function PublicFooter() {
   return (
-    <footer
-      style={{
-        background: 'var(--text)',
-        color: 'rgba(250,247,242,0.4)',
-        padding: '64px 48px 32px',
-      }}
-    >
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '2fr 1fr 1fr 1fr',
-          gap: 48,
-          paddingBottom: 40,
-          borderBottom: '1px solid rgba(250,247,242,0.08)',
-          maxWidth: 1400,
-          margin: '0 auto',
-        }}
-      >
+    <footer className="public-footer">
+      <div className="footer-grid">
         <div>
           <Logo size={32} variant="light" />
           <p style={{ marginTop: 20, fontSize: 13, lineHeight: 1.8, color: 'rgba(250,247,242,0.5)', maxWidth: 360, fontWeight: 300 }}>
@@ -67,17 +51,7 @@ export function PublicFooter() {
         </div>
       </div>
 
-      <div
-        style={{
-          paddingTop: 24,
-          display: 'flex',
-          justifyContent: 'space-between',
-          fontSize: 11,
-          letterSpacing: '0.06em',
-          maxWidth: 1400,
-          margin: '0 auto',
-        }}
-      >
+      <div className="footer-bottom">
         <span>© 2026 Alma Carita · Изработено с ♡</span>
         <Link href="/admin/login" style={{ color: 'rgba(250,247,242,0.3)' }}>
           Admin вход →
