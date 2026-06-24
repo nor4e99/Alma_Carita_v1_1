@@ -101,7 +101,7 @@ export function PublicNav() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="nav-mobile-link"
+                    className="nav-mobile-link tap-feedback"
                     data-active={isActive}
                   >
                     {link.label}
@@ -110,10 +110,10 @@ export function PublicNav() {
               })}
             </div>
             <div className="nav-mobile-actions">
-              <Link href="/imoti?fav=1" className="btn btn-ghost" style={{ width: '100%' }}>
+              <Link href="/imoti?fav=1" className="btn btn-ghost tap-feedback" style={{ width: '100%' }}>
                 ♡ Запазени{favCount > 0 ? ` · ${favCount}` : ''}
               </Link>
-              <Link href="/kontakt" className="btn btn-primary" style={{ width: '100%' }}>
+              <Link href="/kontakt" className="btn btn-primary tap-feedback" style={{ width: '100%' }}>
                 Запитване
               </Link>
             </div>

@@ -136,10 +136,21 @@ button { font-family: var(--sans); cursor: pointer; }
 
 @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeScale { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+@keyframes slideInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes slideInRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
 @keyframes spin-slow { to { transform: rotate(360deg); } }
 @keyframes breathe { 0%, 100% { opacity: 0.8; transform: scale(1); } 50% { opacity: 1; transform: scale(1.03); } }
+@keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+@keyframes gentle-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 0 0 rgba(176, 55, 154, 0.2); } 50% { box-shadow: 0 0 20px 8px rgba(176, 55, 154, 0.15); } }
+@keyframes text-reveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0% 0 0); } }
+
 .fade-up { animation: fadeUp 0.8s ease-out both; }
 .fade-in { animation: fadeIn 0.6s ease-out both; }
+.fade-scale { animation: fadeScale 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.slide-left { animation: slideInLeft 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.slide-right { animation: slideInRight 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
 
 /* ============================================================
    IMMERSIVE LAYER — 4 стълба, дълбочина, morph, scrollytelling
@@ -183,6 +194,56 @@ button { font-family: var(--sans); cursor: pointer; }
 .reveal-d2 { transition-delay: 0.16s; }
 .reveal-d3 { transition-delay: 0.24s; }
 .reveal-d4 { transition-delay: 0.32s; }
+.reveal-d5 { transition-delay: 0.40s; }
+.reveal-d6 { transition-delay: 0.48s; }
+
+/* Scale-in reveal variant */
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-scale.in { opacity: 1; transform: scale(1); }
+
+/* Slide-in-left reveal variant */
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-left.in { opacity: 1; transform: translateX(0); }
+
+/* Slide-in-right reveal variant */
+.reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-right.in { opacity: 1; transform: translateX(0); }
+
+/* Hover lift for interactive cards */
+.hover-lift {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+@media (hover: none) {
+  .hover-lift:active {
+    transform: scale(0.97);
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+/* Tap feedback for mobile */
+.tap-feedback {
+  transition: transform 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.tap-feedback:active {
+  transform: scale(0.96);
+}
 
 /* Морфиращ blob фон — за hero атмосфера */
 @keyframes morph-blob {
@@ -265,7 +326,7 @@ button { font-family: var(--sans); cursor: pointer; }
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
-  .reveal { opacity: 1; transform: none; }
+  .reveal, .reveal-scale, .reveal-left, .reveal-right { opacity: 1; transform: none; }
 }
 
 /* ============================================================
@@ -426,6 +487,10 @@ svg g[filter] { transform-box: view-box; }
   from { transform: translateX(100%); }
   to { transform: translateX(0); }
 }
+@keyframes slideOutRight {
+  from { transform: translateX(0); }
+  to { transform: translateX(100%); }
+}
 .nav-mobile-links {
   display: flex;
   flex-direction: column;
@@ -539,6 +604,27 @@ svg g[filter] { transform-box: view-box; }
 /* ============================================================
    MOBILE BREAKPOINTS
    ============================================================ */
+
+/* --- Tablet breakpoint --- */
+@media (max-width: 1024px) {
+  .public-nav {
+    padding: 18px 28px;
+  }
+  .catalog-filters {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+  }
+  .about-hero-grid {
+    gap: clamp(24px, 4vw, 48px);
+  }
+  .event-card {
+    gap: clamp(16px, 3vw, 32px);
+  }
+}
+
 @media (max-width: 768px) {
   /* Nav */
   .public-nav {
@@ -628,6 +714,50 @@ svg g[filter] { transform-box: view-box; }
     opacity: 0.3 !important;
     filter: blur(50px) !important;
   }
+
+  /* Mobile reveal variants — shorter travel distance */
+  .reveal {
+    transform: translateY(24px);
+  }
+  .reveal-left {
+    transform: translateX(-20px);
+  }
+  .reveal-right {
+    transform: translateX(20px);
+  }
+
+  /* Buttons — larger touch targets */
+  .btn {
+    padding: 16px 28px;
+    font-size: 12px;
+    min-height: 48px;
+  }
+  .btn-sm {
+    padding: 12px 20px;
+    min-height: 44px;
+  }
+
+  /* Mobile nav menu animations */
+  .nav-mobile-link {
+    opacity: 0;
+    animation: fadeUp 0.4s ease-out forwards;
+  }
+  .nav-mobile-link:nth-child(1) { animation-delay: 0.05s; }
+  .nav-mobile-link:nth-child(2) { animation-delay: 0.1s; }
+  .nav-mobile-link:nth-child(3) { animation-delay: 0.15s; }
+  .nav-mobile-link:nth-child(4) { animation-delay: 0.2s; }
+  .nav-mobile-link:nth-child(5) { animation-delay: 0.25s; }
+
+  /* Scroll indicators */
+  .section-pad {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  /* Smooth scrolling on mobile */
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 @media (max-width: 480px) {
@@ -648,5 +778,53 @@ svg g[filter] { transform-box: view-box; }
   .nav-mobile-menu {
     width: 100vw;
     padding: 80px 24px 32px;
+  }
+  .pillar-card {
+    padding: 24px 18px !important;
+    min-height: 180px !important;
+  }
+  .h-display {
+    line-height: 1.1;
+  }
+  /* Cards stack better */
+  .catalog-grid {
+    gap: 16px;
+  }
+  .trainings-grid {
+    gap: 16px;
+  }
+}
+
+/* ============================================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ============================================================ */
+@media (hover: none) and (pointer: coarse) {
+  /* Disable hover-only effects on touch */
+  .pillar-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .pillar-card:active {
+    transform: scale(0.98);
+    border-color: var(--accent);
+  }
+  .accent-card:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+  }
+  .accent-card:active {
+    transform: scale(0.98);
+  }
+  .petal-nav-item:hover {
+    transform: none;
+    filter: none;
+  }
+  /* Larger tap targets */
+  .pill {
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+  .nav-mobile-link {
+    padding: 18px 0;
   }
 }
