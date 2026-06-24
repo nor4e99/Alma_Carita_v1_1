@@ -62,7 +62,7 @@ export function FlowerNav() {
       ref={wrapRef}
       onMouseMove={onMove}
       onMouseLeave={() => { setTilt({ x: 0, y: 0 }); setHovered(null); }}
-      style={{ position: 'relative', width: 'min(440px, 80vw)', aspectRatio: '1', margin: '40px auto 0', perspective: '1000px' }}
+      style={{ position: 'relative', width: 'min(440px, 75vw)', aspectRatio: '1', margin: '40px auto 0', perspective: '1000px' }}
     >
       <div
         style={{
